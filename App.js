@@ -1,11 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Animated, View } from "react-native";
+import RubberBandEffect from "./components/Band";
+import { EvilIcons } from "@expo/vector-icons";
+import { useState } from "react";
 
 export default function App() {
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handlePress = () => {
+    setIsPressed(true);
+  };
+
+  const resetAnimation = () => {
+    setIsPressed(false);
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {isPressed && (
+        <View style={styles.rubberBandContainer}>
+          <RubberBandEffect />
+        </View>
+      )}
+      <Pressable onPress={handlePress} onPressOut={resetAnimation}>
+        {({ pressed }) => (
+          <Animated.View style={[styles.buttonContainer, isPressed && pressed]}>
+            <EvilIcons name="share-apple" size={40} color="black" />
+          </Animated.View>
+        )}
+      </Pressable>
     </View>
   );
 }
@@ -13,8 +35,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "lightpink",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    backgroundColor: "lightgrey",
+    padding: 10,
+    borderRadius: 20,
+    marginTop: 10,
   },
 });
